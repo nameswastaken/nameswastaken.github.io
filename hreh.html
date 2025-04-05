@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Network Info</title>
+</head>
+<body style="background-color: black; color: white; font-family: monospace;">
+  <h1>Network Info</h1>
+  <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+  <p><strong>IP Address:</strong> <span id="ipAddress">Loading...</span></p>
+  <p><strong>Headers:</strong></p>
+  <pre id="headers">Loading...</pre>
+
+  <script>
+    // Show user agent
+    document.getElementById('userAgent').textContent = navigator.userAgent;
+
+    // Get IP and headers from httpbin
+    fetch('https://httpbin.org/get')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('ipAddress').textContent = data.origin;
+        document.getElementById('headers').textContent = JSON.stringify(data.headers, null, 2);
+      })
+      .catch(error => {
+        document.getElementById('ipAddress').textContent = 'Error loading IP';
+        document.getElementById('headers').textContent = 'Error loading headers';
+        console.error(error);
+      });
+  </script>
+</body>
+</html>
