@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Network Info</title>
+  <title>Basic Network Info</title>
 </head>
 <body style="background-color: black; color: white; font-family: monospace;">
-  <h1>Network Info</h1>
+  <h1>Basic Network Info</h1>
   <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
-  <p><strong>IP Address:</strong> <span id="ipAddress">Loading...</span></p>
-  <p><strong>Headers:</strong></p>
-  <pre id="headers">Loading...</pre>
+  <p><strong>Language:</strong> <span id="language"></span></p>
+  <p><strong>Platform:</strong> <span id="platform"></span></p>
+  <p><strong>Online:</strong> <span id="online"></span></p>
+  <p><strong>Connection Type:</strong> <span id="connectionType"></span></p>
+  <p><strong>Downlink Speed (Mbps):</strong> <span id="downlink"></span></p>
 
   <script>
-    // Show user agent
-    document.getElementById('userAgent').textContent = navigator.userAgent;
+    document.getElementById('userAgent').textContent = navigator.userAgent || 'N/A';
+    document.getElementById('language').textContent = navigator.language || 'N/A';
+    document.getElementById('platform').textContent = navigator.platform || 'N/A';
+    document.getElementById('online').textContent = navigator.onLine ? 'Yes' : 'No';
 
-    // Get IP and headers from httpbin
-    fetch('https://httpbin.org/get')
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById('ipAddress').textContent = data.origin;
-        document.getElementById('headers').textContent = JSON.stringify(data.headers, null, 2);
-      })
-      .catch(error => {
-        document.getElementById('ipAddress').textContent = 'Error loading IP';
-        document.getElementById('headers').textContent = 'Error loading headers';
-        console.error(error);
-      });
+    var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (connection) {
+      document.getElementById('connectionType').textContent = connection.effectiveType || 'Unknown';
+      document.getElementById('downlink').textContent = connection.downlink || 'Unknown';
+    } else {
+      document.getElementById('connectionType').textContent = 'Not supported';
+      document.getElementById('downlink').textContent = 'Not supported';
+    }
   </script>
 </body>
 </html>
